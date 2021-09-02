@@ -1,11 +1,11 @@
 import rclpy
 from rclpy.node import Node
 import cv2
-import numpy
 from sensor_msgs.msg import Image
 from cv_bridge import CvBridge
-cap = cv2.VideoCapture(0)
-bridge = CvBridge()
+
+cap = cv2.VideoCapture(0) # cv2 captures video from your default video input
+bridge = CvBridge() 
 
 class MinimalPublisher(Node):
 
@@ -18,22 +18,23 @@ class MinimalPublisher(Node):
         
     
 
-    def timer_callback(self):
-        ret,frame = cap.read()
-        cap2 = bridge.cv2_to_imgmsg(frame, 'passthrough')
-        # msg = cap2
-        # msg.data = msg
-        self.publisher_.publish(cap2)
-        # self.get_logger().info('Publishing: "%s"' % msg)
-        # self.i += 1
+    def timer_callback(self): # this function loops the code inside
+        ret,frame = cap.read() # cv2 captures the current image frame
+        if ret: # if there is image coming out from default cam
+            cap2 = bridge.cv2_to_imgmsg(frame, 'passthrough') # converts cv2 image to ros message
+            self.publisher_.publish(cap2) # publishes the image that just got converted
+        
+        else: # if there is NO image coming out from default cam
+            print("No camera device connected")
+            return
+
+
 
 
 def main(args=None):
     rclpy.init(args=args)
     minimal_publisher = MinimalPublisher()
-
     rclpy.spin(minimal_publisher)
-
     # Destroy the node explicitly
     # (optional - otherwise it will be done automatically
     # when the garbage collector destroys the node object)

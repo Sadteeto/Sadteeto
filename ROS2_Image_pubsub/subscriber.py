@@ -16,10 +16,10 @@ class MinimalSubscriber(Node):
             10)
         self.subscription  # prevent unused variable warning
 
-    def listener_callback(self, msg):
-        br = CvBridge()
-        current_frame = br.imgmsg_to_cv2(msg)
-        cv2.imshow("camera", current_frame)
+    def listener_callback(self, msg): # this function loops the code inside
+        br = CvBridge() #cv bridge
+        current_frame = br.imgmsg_to_cv2(msg) # converts ros image message to cv2 image
+        cv2.imshow("camera", current_frame)  # shows the image that just got converted 
         cv2.waitKey(1)
         
 
